@@ -5,8 +5,8 @@ import Products from "./pages/Products";
 import Login from "./pages/Login";
 import { Button } from "./components/ui/button";
 import { AuthProvider } from "./context/AuthProvider";
-import PrivateRoute from "./lib/PrivateRoute";
-import ThemeToggle from "./lib/ThemeToggle";
+import PrivateRoute from "./components/PrivateRoute";
+import ThemeToggle from "./components/ThemeToggle";
 import { useAuth } from "./hooks/useAuth";
 
 function Header() {
