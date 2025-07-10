@@ -1,34 +1,67 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
-import Home from "./pages/Home"
-import About from "./pages/About"
-import Post from "./pages/Post"
-import PostDetail from "./pages/PostDetail"
-import { Button } from "./components/ui/button"
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Products from "./pages/Products";
+import Login from "./pages/Login";
+import { Button } from "./components/ui/button";
+import { AuthProvider } from "./context/AuthProvider";
+import PrivateRoute from "./lib/PrivateRoute";
+import ThemeToggle from "./lib/ThemeToggle";
+import { useAuth } from "./hooks/useAuth";
 
-function App() {
+function Header() {
+  const { token, logout } = useAuth();
 
   return (
-    <BrowserRouter>
-      <div className="w-full flex gap-4 p-4 justify-center border-b mb-8">
+    <div className="w-full flex flex-wrap gap-4 p-4 justify-center border-b mb-4 bg-white dark:bg-zinc-900">
+      <Button asChild variant="outline">
+        <Link to="/">Home</Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link to="/about">About</Link>
+      </Button>
+
+      {token && (
         <Button asChild variant="outline">
-          <Link to="/">Home</Link>
+          <Link to="/products">Products</Link>
         </Button>
+      )}
+
+      <ThemeToggle />
+
+      {token ? (
+        <Button onClick={logout} variant="destructive">
+          Logout
+        </Button>
+      ) : (
         <Button asChild variant="outline">
-          <Link to="/about">About</Link>
+          <Link to="/login">Login</Link>
         </Button>
-        <Button asChild variant="outline">
-          <Link to="/post">Post</Link>
-        </Button>
-      </div>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/post" element={<Post />}>
-          <Route path=":postId" element={<PostDetail />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  )
+      )}
+    </div>
+  );
 }
 
-export default App
+
+function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/products" element={
+            <PrivateRoute>
+              <Products />
+            </PrivateRoute>
+          }>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
+
+export default App;

@@ -1,1 +1,1 @@
-# Day 3 – Routing, Tailwind CSS, dan ShadCN UI Components
+# Day 4 – Advanced Styling, Authentication, Private Route, dan Data Fetching
